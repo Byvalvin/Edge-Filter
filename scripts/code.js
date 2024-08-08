@@ -278,8 +278,8 @@ function applyCannyEdgeDetection() {
     const suppressed = nonMaximumSuppression(gradientMagnitude, gradientDirection, width, height);
 
     // Step 5: Double Thresholding
-    const lowThreshold = 20;
-    const highThreshold = 100;
+    const lowThreshold = 0;
+    const highThreshold = 50;
     const thresholded = doubleThresholding(suppressed, width, height, lowThreshold, highThreshold);
     
     // Step 6: Edge Tracking
