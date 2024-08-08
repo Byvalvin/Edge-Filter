@@ -10,14 +10,23 @@ uploadInput.addEventListener('change', (event) => {
         reader.onload = function(e) {
             const img = new Image();
             img.onload = function() {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx?.drawImage(img, 0, 0);
+                // Maintain aspect ratio
+                const aspectRatio = img.width / img.height;
+                if (img.width > img.height) {
+                    canvas.width = 500; // Set a max width
+                    canvas.height = 500 / aspectRatio;
+                } else {
+                    canvas.height = 500; // Set a max height
+                    canvas.width = 500 * aspectRatio;
+                }
+                ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
                 applyEdgeDetection();
             };
             img.src = e.target?.result as string;
         };
         reader.readAsDataURL(file);
+    } else {
+        alert('No file selected. Please upload an image.');
     }
 });
 
