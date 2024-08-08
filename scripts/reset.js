@@ -1,5 +1,5 @@
 // Function for reset button
-const code = `
+const buttonCode = `
 const resetControl = () => {
   const resetButton = document.getElementById('resetButton') as HTMLButtonElement;
     resetButton.addEventListener('click', () => {
@@ -17,5 +17,5 @@ const resetControl = () => {
 };
 `
 // Evaluate the TypeScript code and run it
-const jsCode = ts.transpile(code);
+const jsCode = ts.transpile(buttonCode);
 eval(jsCode);
