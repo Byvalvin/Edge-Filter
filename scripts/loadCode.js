@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-  next = {
-    src:'scripts/compile.js',
-    msg:"Done loading compile.js"
-  }
-  loadScript('scripts/code.js', 'Done loading code.js', next)
+
+  loadScript('scripts/code.js', 'Done loading code.js')
   
 });
 
