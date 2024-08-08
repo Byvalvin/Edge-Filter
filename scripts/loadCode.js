@@ -1,4 +1,4 @@
-document.addEventListener('DOMCOntentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   next = {
     src:'scripts/compile.js',
     msg:"Done loading compile.js"
