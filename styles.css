@@ -38,16 +38,15 @@ h2 {
 #upload {
     display: block;
     margin: 20px 0;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: #f9f9f9;
-    transition: background 0.3s;
 }
 
-#upload:hover {
-    background: #e9ecef; /* Light background on hover */
+#edgeDetectionMethod {
+    display: block; /* Make it a block element for better alignment */
+    margin: 20px 0;
+    padding: 10px; /* Add padding for better appearance */
+    border: 1px solid #ccc; /* Border styling */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Adjust font size */
 }
 
 #canvas {
@@ -82,22 +81,6 @@ h2 {
     font-family: 'Courier New', Courier, monospace;
 }
 
-/* Button Styles */
-button {
-    padding: 10px 15px;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
-}
-
-button:hover {
-    background: #0056b3; /* Darker blue on hover */
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
@@ -111,6 +94,10 @@ button:hover {
 
     .code-container textarea {
         height: 150px; /* Adjust textarea height for smaller screens */
+    }
+
+    #edgeDetectionMethod {
+        width: 100%; /* Ensure the dropdown scales with its container */
     }
 }
 
