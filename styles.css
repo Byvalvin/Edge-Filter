@@ -38,6 +38,16 @@ h2 {
 #upload {
     display: block;
     margin: 20px 0;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f9f9f9;
+    transition: background 0.3s;
+}
+
+#upload:hover {
+    background: #e9ecef; /* Light background on hover */
 }
 
 #canvas {
@@ -70,6 +80,22 @@ h2 {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-family: 'Courier New', Courier, monospace;
+}
+
+/* Button Styles */
+button {
+    padding: 10px 15px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #0056b3; /* Darker blue on hover */
 }
 
 /* Responsive Design */
