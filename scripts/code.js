@@ -249,25 +249,33 @@ function applyCannyEdgeDetection() {
     const width = canvas.width;
     const height = canvas.height;
 
+    // Step 1: Gaussian Blur
     const blurredData = gaussianBlur(data, width, height);
+    
+    // Step 2: Compute Gradients
     const [gradientMagnitude, gradientDirection] = computeGradients(blurredData, width, height);
+    
+    // Step 3: Non-Maximum Suppression
     const suppressed = nonMaximumSuppression(gradientMagnitude, gradientDirection, width, height);
 
+    // Step 4: Double Thresholding
     const lowThreshold = 50;
     const highThreshold = 150;
     const thresholded = doubleThresholding(suppressed, width, height, lowThreshold, highThreshold);
     
+    // Step 5: Edge Tracking
     const finalOutput = edgeTracking(thresholded, width, height);
 
+    // Step 6: Set the output image data
     const output = ctx.createImageData(width, height);
     const outputData = output.data;
 
     for (let i = 0; i < finalOutput.length; i++) {
         const value = finalOutput[i] === 255 ? 255 : 0; // Black and white
-        outputData[i] = value;
-        outputData[i + 1] = value;
-        outputData[i + 2] = value;
-        outputData[i + 3] = 255; // Alpha
+        outputData[i] = value;      // Red
+        outputData[i + 1] = value;  // Green
+        outputData[i + 2] = value;  // Blue
+        outputData[i + 3] = 255;     // Alpha
     }
 
     ctx.putImageData(output, 0, 0);
