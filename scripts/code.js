@@ -186,7 +186,7 @@ function computeGradients(data: Uint8ClampedArray, width: number, height: number
             direction[index] = Math.atan2(pixelY, pixelX) * (180 / Math.PI) + 180; // Normalize to 0-360
 
             // Log the gradient magnitude and direction
-            console.log(`(${x}, ${y}) - Magnitude: ${magnitude[index]}, Direction: ${direction[index]}`);
+            // console.log(`(${x}, ${y}) - Magnitude: ${magnitude[index]}, Direction: ${direction[index]}`);
         }
     }
 
