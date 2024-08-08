@@ -2,7 +2,8 @@ document.addEventListener('DOMCOntentLoaded', () => {
   
   const code = document.getElementById('code');
   const codeHolder = document.createElement('div');
-  codeHolder.innerHTML = `
+  codeHolder.innerHTML = 
+          `
           <textarea id="ts-code">
           const canvas = document.getElementById('canvas') as HTMLCanvasElement;
           const ctx = canvas.getContext('2d');
