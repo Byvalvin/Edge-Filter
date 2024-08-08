@@ -2,6 +2,7 @@ const code = `
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d');
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
+const edgeDetectionMethod = document.getElementById('edgeDetectionMethod') as HTMLSelectElement;
 
 uploadInput.addEventListener('change', (event) => {
     const file = (event.target as HTMLInputElement).files?.[0];
@@ -31,6 +32,16 @@ uploadInput.addEventListener('change', (event) => {
 });
 
 function applyEdgeDetection() {
+    const method = edgeDetectionMethod.value; // Get the selected method
+    if (method === 'sobel') {
+        applySobelEdgeDetection();
+    } else if (method === 'canny') {
+        applyCannyEdgeDetection();
+    }
+}
+
+// Sobel Edge Detection Function
+function applySobelEdgeDetection() {
     if (!ctx) return;
     
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -83,6 +94,180 @@ function applyEdgeDetection() {
             const value = Math.min(magnitude, 255);
             setPixel(x, y, value, value, value);
         }
+    }
+
+    ctx.putImageData(output, 0, 0);
+}
+
+// Canny Edge Detection Functions
+function gaussianBlur(data: Uint8ClampedArray, width: number, height: number) {
+    const kernel = [
+        [1, 4, 6, 4, 1],
+        [4, 16, 24, 16, 4],
+        [6, 24, 36, 24, 6],
+        [4, 16, 24, 16, 4],
+        [1, 4, 6, 4, 1],
+    ];
+    const kernelSum = 256;
+
+    const output = new Uint8ClampedArray(data.length);
+
+    for (let y = 2; y < height - 2; y++) {
+        for (let x = 2; x < width - 2; x++) {
+            let r = 0, g = 0, b = 0;
+            for (let ky = -2; ky <= 2; ky++) {
+                for (let kx = -2; kx <= 2; kx++) {
+                    const index = ((y + ky) * width + (x + kx)) * 4;
+                    r += data[index] * kernel[ky + 2][kx + 2];
+                    g += data[index + 1] * kernel[ky + 2][kx + 2];
+                    b += data[index + 2] * kernel[ky + 2][kx + 2];
+                }
+            }
+            const index = (y * width + x) * 4;
+            output[index] = r / kernelSum;
+            output[index + 1] = g / kernelSum;
+            output[index + 2] = b / kernelSum;
+            output[index + 3] = 255;
+        }
+    }
+
+    return output;
+}
+
+function computeGradients(data: Uint8ClampedArray, width: number, height: number) {
+    const Gx = [
+        [-1, 0, 1],
+        [-2, 0, 2],
+        [-1, 0, 1]
+    ];
+    const Gy = [
+        [1, 2, 1],
+        [0, 0, 0],
+        [-1, -2, -1]
+    ];
+
+    const magnitude = new Uint8ClampedArray(data.length);
+    const direction = new Float32Array(width * height);
+
+    for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < width - 1; x++) {
+            let pixelX = 0;
+            let pixelY = 0;
+
+            for (let ky = -1; ky <= 1; ky++) {
+                for (let kx = -1; kx <= 1; kx++) {
+                    const gray = (data[((y + ky) * width + (x + kx)) * 4] +
+                                   data[((y + ky) * width + (x + kx)) * 4 + 1] +
+                                   data[((y + ky) * width + (x + kx)) * 4 + 2]) / 3;
+                    pixelX += gray * Gx[ky + 1][kx + 1];
+                    pixelY += gray * Gy[ky + 1][kx + 1];
+                }
+            }
+
+            const index = y * width + x;
+            const mag = Math.sqrt(pixelX * pixelX + pixelY * pixelY);
+            magnitude[index] = Math.min(mag, 255);
+            direction[index] = Math.atan2(pixelY, pixelX) * (180 / Math.PI) + 180; // Normalize to 0-360
+        }
+    }
+
+    return [magnitude, direction];
+}
+
+function nonMaximumSuppression(magnitude: Uint8ClampedArray, direction: number[], width: number, height: number) {
+    const output = new Uint8ClampedArray(magnitude.length);
+
+    for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < width - 1; x++) {
+            const index = (y * width + x);
+            const angle = direction[index];
+
+            let q = 255, r = 255;
+            if ((angle >= 0 && angle < 45) || (angle >= 135 && angle < 180)) {
+                q = magnitude[index - 1]; // Pixel to the left
+                r = magnitude[index + 1]; // Pixel to the right
+            } else if (angle >= 45 && angle < 135) {
+                q = magnitude[index - width]; // Pixel above
+                r = magnitude[index + width]; // Pixel below
+            }
+
+            if (magnitude[index] >= q && magnitude[index] >= r) {
+                output[index] = magnitude[index];
+            } else {
+                output[index] = 0;
+            }
+        }
+    }
+
+    return output;
+}
+
+function doubleThresholding(magnitude: Uint8ClampedArray, width: number, height: number, lowThreshold: number, highThreshold: number) {
+    const output = new Uint8ClampedArray(magnitude.length);
+
+    for (let i = 0; i < magnitude.length; i++) {
+        if (magnitude[i] >= highThreshold) {
+            output[i] = 255; // Strong edge
+        } else if (magnitude[i] >= lowThreshold) {
+            output[i] = 127; // Weak edge
+        } else {
+            output[i] = 0; // Non-edge
+        }
+    }
+
+    return output;
+}
+
+function edgeTracking(output: Uint8ClampedArray, width: number, height: number) {
+    const finalOutput = new Uint8ClampedArray(output.length);
+
+    for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < width - 1; x++) {
+            const index = (y * width + x);
+            if (output[index] === 255) {
+                finalOutput[index] = 255; // Strong edge
+            } else if (output[index] === 127) {
+                // Check neighboring pixels for strong edges
+                if (output[index - 1] === 255 || output[index + 1] === 255 ||
+                    output[index - width] === 255 || output[index + width] === 255 ||
+                    output[index - width - 1] === 255 || output[index - width + 1] === 255 ||
+                    output[index + width - 1] === 255 || output[index + width + 1] === 255) {
+                    finalOutput[index] = 255; // Weak edge connected to a strong edge
+                }
+            }
+        }
+    }
+
+    return finalOutput;
+}
+
+function applyCannyEdgeDetection() {
+    if (!ctx) return;
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    const width = canvas.width;
+    const height = canvas.height;
+
+    const blurredData = gaussianBlur(data, width, height);
+    const [gradientMagnitude, gradientDirection] = computeGradients(blurredData, width, height);
+    const suppressed = nonMaximumSuppression(gradientMagnitude, gradientDirection, width, height);
+
+    const lowThreshold = 50;
+    const highThreshold = 150;
+    const thresholded = doubleThresholding(suppressed, width, height, lowThreshold, highThreshold);
+    
+    const finalOutput = edgeTracking(thresholded, width, height);
+
+    const output = ctx.createImageData(width, height);
+    const outputData = output.data;
+
+    for (let i = 0; i < finalOutput.length; i++) {
+        const value = finalOutput[i] === 255 ? 255 : 0; // Black and white
+        outputData[i] = value;
+        outputData[i + 1] = value;
+        outputData[i + 2] = value;
+        outputData[i + 3] = 255; // Alpha
     }
 
     ctx.putImageData(output, 0, 0);
