@@ -285,6 +285,10 @@ function applyCannyEdgeDetection() {
     // Step 6: Edge Tracking
     const finalOutput = edgeTracking(thresholded, width, height);
 
+    // Clear the canvas before drawing the new image
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+
     // Step 7: Set the output image data
     const output = ctx.createImageData(width, height);
     const outputData = output.data;
