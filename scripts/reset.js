@@ -17,5 +17,5 @@ const resetControl = () => {
 };
 `
 // Evaluate the TypeScript code and run it
-const jsCode = ts.transpile(buttonCode);
-eval(jsCode);
+const buttonJsCode = ts.transpile(buttonCode);
+eval(buttonJsCode);
