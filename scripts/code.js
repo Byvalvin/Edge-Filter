@@ -4,6 +4,22 @@ const ctx = canvas.getContext('2d');
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
 const edgeDetectionMethod = document.getElementById('edgeDetectionMethod') as HTMLSelectElement;
 
+function convertToGrayscale(data: Uint8ClampedArray, width: number, height: number): Uint8ClampedArray {
+    const grayscaleData = new Uint8ClampedArray(data.length);
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const index = (y * width + x) * 4;
+            const gray = (data[index] + data[index + 1] + data[index + 2]) / 3;
+            grayscaleData[index] = gray; // R
+            grayscaleData[index + 1] = gray; // G
+            grayscaleData[index + 2] = gray; // B
+            grayscaleData[index + 3] = 255; // Alpha
+        }
+    }
+    return grayscaleData;
+}
+
+
 uploadInput.addEventListener('change', (event) => {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
@@ -249,24 +265,27 @@ function applyCannyEdgeDetection() {
     const width = canvas.width;
     const height = canvas.height;
 
-    // Step 1: Gaussian Blur
-    const blurredData = gaussianBlur(data, width, height);
+    // Step 1: Convert to Grayscale
+    const grayscaleData = convertToGrayscale(data, width, height);
     
-    // Step 2: Compute Gradients
+    // Step 2: Gaussian Blur
+    const blurredData = gaussianBlur(grayscaleData, width, height);
+    
+    // Step 3: Compute Gradients
     const [gradientMagnitude, gradientDirection] = computeGradients(blurredData, width, height);
     
-    // Step 3: Non-Maximum Suppression
+    // Step 4: Non-Maximum Suppression
     const suppressed = nonMaximumSuppression(gradientMagnitude, gradientDirection, width, height);
 
-    // Step 4: Double Thresholding
+    // Step 5: Double Thresholding
     const lowThreshold = 50;
     const highThreshold = 150;
     const thresholded = doubleThresholding(suppressed, width, height, lowThreshold, highThreshold);
     
-    // Step 5: Edge Tracking
+    // Step 6: Edge Tracking
     const finalOutput = edgeTracking(thresholded, width, height);
 
-    // Step 6: Set the output image data
+    // Step 7: Set the output image data
     const output = ctx.createImageData(width, height);
     const outputData = output.data;
 
