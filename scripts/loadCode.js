@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-  loadScript('scripts/code.js', 'Done loading code.js');
+  const next = {
+    src:'scripts/reset.js',
+    msg:'Done loading reset.js'
+  }
+  loadScript('scripts/code.js', 'Done loading code.js', next);
   
 });
 
