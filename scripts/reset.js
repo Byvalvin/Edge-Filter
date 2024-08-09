@@ -16,7 +16,7 @@ if (resetButton && canvas && edgeDetectionMethod && uploadInput) {
         
         // Reset dropdown to default (Sobel)
         edgeDetectionMethod.value = 'sobel'; // Reset to default option
-        cannyOptions.style.display = edgeDetectionMethod.value === 'canny' ? 'block' : 'none';
+        cannyOptions.style.display = 'none';
     
         // Clear file input to remove uploaded image
         uploadInput.value = ''; // Clear the file input
