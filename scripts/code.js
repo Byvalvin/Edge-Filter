@@ -185,7 +185,7 @@ function computeGradients(data: Uint8ClampedArray, width: number, height: number
             direction[index] = Math.atan2(pixelY, pixelX) * (180 / Math.PI) + 180; // Normalize to 0-360
 
             // Log the gradient magnitude and direction using double quotes
-            console.log("Pixel(" + x + ", " + y + ") - Magnitude: " + magnitude[index] + ", Direction: " + direction[index]);
+            // console.log("Pixel(" + x + ", " + y + ") - Magnitude: " + magnitude[index] + ", Direction: " + direction[index]);
         }
     }
 
@@ -285,8 +285,8 @@ function applyCannyEdgeDetection() {
     const thresholded = doubleThresholding(suppressed, width, height, lowThreshold, highThreshold);
     
     // Log threshold values and magnitude before double thresholding using double quotes
-    console.log("Low Threshold: " + lowThreshold + ", High Threshold: " + highThreshold);
-    console.log("Gradient Magnitudes:", gradientMagnitude);
+    // console.log("Low Threshold: " + lowThreshold + ", High Threshold: " + highThreshold);
+    // console.log("Gradient Magnitudes:", gradientMagnitude);
     
     // Step 6: Edge Tracking
     const finalOutput = edgeTracking(thresholded, width, height);
