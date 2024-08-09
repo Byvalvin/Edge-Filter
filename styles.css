@@ -69,13 +69,22 @@ h2 {
     font-size: 16px;
 }
 
-#canvas {
+#canvas,
+#sobelCanvas,
+#cannyCanvas {
     border: 1px solid #ddd;
     background: #fafafa;
     max-width: 100%;
     border-radius: 8px;
     width: 100%;
     height: auto;
+    display: block;
+    margin: 10px 0;
+}
+
+#sobelCanvas,
+#cannyCanvas {
+    display: none; /* Initially hidden, shown based on edge detection method */
 }
 
 .code-container {
@@ -127,7 +136,9 @@ h2 {
         padding: 15px;
     }
 
-    #canvas {
+    #canvas,
+    #sobelCanvas,
+    #cannyCanvas {
         height: auto;
     }
 
