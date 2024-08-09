@@ -17,6 +17,18 @@
             <option value="canny">Canny</option>
         </select>
 
+        <div id="cannyOptions" class="hidden">
+            <h2>Canny Edge Detection Thresholds</h2>
+            <label for="lowThreshold">Low Threshold:</label>
+            <input type="number" id="lowThreshold" min="0" max="255" value="50">
+            <label for="highThreshold">High Threshold:</label>
+            <input type="number" id="highThreshold" min="0" max="255" value="100">
+            
+            <h3>Adjust Thresholds:</h3>
+            <input type="range" id="thresholdRange" min="0" max="255" step="1" value="50">
+            <input type="range" id="thresholdRangeHigh" min="0" max="255" step="1" value="100">
+        </div>
+
         <h2>Upload Image for Edge Detection</h2>
         <input type="file" id="upload" />
         <button id="resetButton">Reset</button> <!-- Reset Button -->
@@ -27,4 +39,5 @@
     <script src="scripts/loadCode.js" defer></script>
 </body>
 </html>
+
 
