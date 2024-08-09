@@ -8,7 +8,7 @@ const edgeDetectionMethod = document.getElementById('edgeDetectionMethod') as HT
 const cannyOptions = document.getElementById('cannyOptions') as HTMLDivElement;
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
 
-if (resetButton && canvas && edgeDetectionMethod && uploadInput && sobelCanvas && cannyCanvas) {
+if (resetButton && edgeDetectionMethod && uploadInput && sobelCanvas && cannyCanvas) {
     resetButton.addEventListener('click', () => {
         // const ctx = canvas.getContext('2d');
         const sobelCtx = sobelCanvas.getContext('2d');
@@ -29,7 +29,7 @@ if (resetButton && canvas && edgeDetectionMethod && uploadInput && sobelCanvas &
         uploadInput.value = ''; // Clear the file input
     });
 } else {
-    console.error('Could not find the resetButton, canvas, edgeDetectionMethod, uploadInput, sobelCanvas, or cannyCanvas elements.');
+    console.error('Could not find the resetButton, edgeDetectionMethod, uploadInput, sobelCanvas, or cannyCanvas elements.');
 }
 `;
 
