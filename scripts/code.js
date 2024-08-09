@@ -462,24 +462,7 @@ function applyCannyEdgeDetection2() {
     ctx.putImageData(output, 0, 0);
 }
 
-function drawImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, imageData: Uint8ClampedArray, width: number, height: number) {
-    canvas.width = width;
-    canvas.height = height;
-    const image = context.createImageData(width, height);
-    image.data.set(imageData);
-    context.putImageData(image, 0, 0);
-}
 
-function applyCannyEdgeDetection3(imageData: Uint8ClampedArray, width: number, height: number) {
-    const grayscale = convertToGrayscale(imageData, width, height);
-    const blurred = gaussianBlur(grayscale, width, height);
-    const [magnitude, direction] = computeGradients(blurred, width, height);
-    const suppressed = nonMaximumSuppression(magnitude, direction, width, height);
-    const thresholded = doubleThresholding(suppressed, width, height, 0, 50);
-    const edges = edgeTracking(thresholded, width, height);
-    drawImage(canvas, ctx, edges, img.width, img.height);
-    // return edges;
-}
 
 function applyCannyEdgeDetection() {
     if (!ctx) return;
@@ -503,7 +486,7 @@ function applyCannyEdgeDetection() {
 
     // Step 5: Double Thresholding
     const lowThreshold = 50;
-    const highThreshold = 150;
+    const highThreshold = 100;
     const thresholded = doubleThresholding(suppressed, width, height, lowThreshold, highThreshold);
     
     // Step 6: Edge Tracking by Hysteresis
