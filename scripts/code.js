@@ -4,7 +4,7 @@ const ctx = canvas.getContext('2d');
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
 const edgeDetectionMethod = document.getElementById('edgeDetectionMethod') as HTMLSelectElement;
 
-function convertToGrayscale(data: Uint8ClampedArray, width: number, height: number): Uint8ClampedArray {
+function convertToGrayscale2(data: Uint8ClampedArray, width: number, height: number): Uint8ClampedArray {
     const grayscaleData = new Uint8ClampedArray(data.length);
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
@@ -15,6 +15,21 @@ function convertToGrayscale(data: Uint8ClampedArray, width: number, height: numb
             grayscaleData[index + 2] = gray; // B
             grayscaleData[index + 3] = 255; // Alpha
         }
+    }
+    return grayscaleData;
+}
+
+function convertToGrayscale(data: Uint8ClampedArray, width: number, height: number): Uint8ClampedArray {
+    const grayscaleData = new Uint8ClampedArray(data.length);
+    for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+        grayscaleData[i] = gray;
+        grayscaleData[i + 1] = gray;
+        grayscaleData[i + 2] = gray;
+        grayscaleData[i + 3] = 255; // Alpha
     }
     return grayscaleData;
 }
@@ -115,7 +130,7 @@ function applySobelEdgeDetection() {
 }
 
 // Canny Edge Detection Functions
-function gaussianBlur(data: Uint8ClampedArray, width: number, height: number) {
+function gaussianBlur2(data: Uint8ClampedArray, width: number, height: number) {
     const kernel = [
         [1, 4, 6, 4, 1],
         [4, 16, 24, 16, 4],
@@ -149,7 +164,37 @@ function gaussianBlur(data: Uint8ClampedArray, width: number, height: number) {
     return output;
 }
 
-function computeGradients(data: Uint8ClampedArray, width: number, height: number) {
+function gaussianBlur(data: Uint8ClampedArray, width: number, height: number): Uint8ClampedArray {
+    const kernel = [
+        [1, 4, 6, 4, 1],
+        [4, 16, 24, 16, 4],
+        [6, 24, 36, 24, 6],
+        [4, 16, 24, 16, 4],
+        [1, 4, 6, 4, 1]
+    ];
+    const kernelSum = 256;
+    const output = new Uint8ClampedArray(data.length);
+
+    for (let y = 2; y < height - 2; y++) {
+        for (let x = 2; x < width - 2; x++) {
+            let sum = 0;
+            for (let ky = -2; ky <= 2; ky++) {
+                for (let kx = -2; kx <= 2; kx++) {
+                    const index = ((y + ky) * width + (x + kx)) * 4;
+                    sum += data[index] * kernel[ky + 2][kx + 2];
+                }
+            }
+            const index = (y * width + x) * 4;
+            output[index] = sum / kernelSum;
+            output[index + 1] = sum / kernelSum;
+            output[index + 2] = sum / kernelSum;
+            output[index + 3] = 255; // Alpha
+        }
+    }
+    return output;
+}
+
+function computeGradients2(data: Uint8ClampedArray, width: number, height: number) {
     const Gx = [
         [-1, 0, 1],
         [-2, 0, 2],
@@ -192,7 +237,45 @@ function computeGradients(data: Uint8ClampedArray, width: number, height: number
     return [magnitude, direction];
 }
 
-function nonMaximumSuppression(magnitude: Uint8ClampedArray, direction: number[], width: number, height: number) {
+function computeGradients(data: Uint8ClampedArray, width: number, height: number) {
+    const Gx = [
+        [-1, 0, 1],
+        [-2, 0, 2],
+        [-1, 0, 1]
+    ];
+    const Gy = [
+        [1, 2, 1],
+        [0, 0, 0],
+        [-1, -2, -1]
+    ];
+
+    const magnitude = new Uint8ClampedArray(data.length);
+    const direction = new Float32Array(width * height);
+
+    for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < width - 1; x++) {
+            let pixelX = 0;
+            let pixelY = 0;
+
+            for (let ky = -1; ky <= 1; ky++) {
+                for (let kx = -1; kx <= 1; kx++) {
+                    const gray = data[((y + ky) * width + (x + kx)) * 4];
+                    pixelX += gray * Gx[ky + 1][kx + 1];
+                    pixelY += gray * Gy[ky + 1][kx + 1];
+                }
+            }
+
+            const index = y * width + x;
+            const mag = Math.sqrt(pixelX * pixelX + pixelY * pixelY);
+            magnitude[index] = Math.min(mag, 255);
+            direction[index] = Math.atan2(pixelY, pixelX) * (180 / Math.PI) + 180; // Normalize to 0-360
+        }
+    }
+
+    return [magnitude, direction];
+}
+
+function nonMaximumSuppression2(magnitude: Uint8ClampedArray, direction: number[], width: number, height: number) {
     const output = new Uint8ClampedArray(magnitude.length);
 
     for (let y = 1; y < height - 1; y++) {
@@ -219,6 +302,41 @@ function nonMaximumSuppression(magnitude: Uint8ClampedArray, direction: number[]
 
     return output;
 }
+
+function nonMaximumSuppression(magnitude: Uint8ClampedArray, direction: number[], width: number, height: number): Uint8ClampedArray {
+    const output = new Uint8ClampedArray(magnitude.length);
+
+    for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < width - 1; x++) {
+            const index = y * width + x;
+            const angle = direction[index];
+
+            let q = 0, r = 0;
+            if ((angle >= 0 && angle < 45) || (angle >= 180 && angle < 225)) {
+                q = magnitude[index - 1]; // Pixel to the left
+                r = magnitude[index + 1]; // Pixel to the right
+            } else if (angle >= 45 && angle < 135) {
+                q = magnitude[index - width]; // Pixel above
+                r = magnitude[index + width]; // Pixel below
+            } else if (angle >= 135 && angle < 180) {
+                q = magnitude[index - width - 1]; // Top-right diagonal
+                r = magnitude[index + width + 1]; // Bottom-left diagonal
+            } else if (angle >= 225 && angle < 315) {
+                q = magnitude[index - width + 1]; // Top-left diagonal
+                r = magnitude[index + width - 1]; // Bottom-right diagonal
+            }
+
+            if (magnitude[index] >= q && magnitude[index] >= r) {
+                output[index] = magnitude[index];
+            } else {
+                output[index] = 0;
+            }
+        }
+    }
+
+    return output;
+}
+
 
 function doubleThresholding(magnitude: Uint8ClampedArray, width: number, height: number, lowThreshold: number, highThreshold: number) {
     const output = new Uint8ClampedArray(magnitude.length);
