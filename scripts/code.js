@@ -491,8 +491,8 @@ function applyCannyEdgeDetection() {
     const suppressed = nonMaximumSuppression(gradientMagnitude, gradientDirection, width, height);
 
     // Step 5: Double Thresholding
-    const lowThreshold = 50;
-    const highThreshold = 100;
+    const lowThreshold = parseInt(lowThresholdInput.value, 10) || 50;
+    const highThreshold = parseInt(highThresholdInput.value, 10) || 150;
     const thresholded = doubleThresholding(suppressed, width, height, lowThreshold, highThreshold);
     
     // Step 6: Edge Tracking by Hysteresis
@@ -508,6 +508,11 @@ function applyCannyEdgeDetection() {
     }
     ctx.putImageData(imageData, 0, 0);
 }
+
+edgeDetectionMethod.addEventListener('change', applyEdgeDetection);
+
+lowThresholdInput.addEventListener('input', applyEdgeDetection);
+highThresholdInput.addEventListener('input', applyEdgeDetection);
 `;
 
 // Evaluate the TypeScript code and run it
