@@ -55,6 +55,11 @@ h2 {
     background: #0056b3; /* Darker blue on hover */
 }
 
+#resetButton:focus {
+    outline: 2px solid #0056b3; /* Focus outline */
+    outline-offset: 2px;
+}
+
 #edgeDetectionMethod {
     display: block; /* Make it a block element for better alignment */
     margin: 20px 0;
