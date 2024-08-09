@@ -1,4 +1,4 @@
-/* styles.css */
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -21,7 +21,7 @@ header {
     padding: 20px;
     background: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
@@ -61,12 +61,12 @@ h2 {
 }
 
 #edgeDetectionMethod {
-    display: block; /* Make it a block element for better alignment */
+    display: block;
     margin: 20px 0;
-    padding: 10px; /* Add padding for better appearance */
-    border: 1px solid #ccc; /* Border styling */
-    border-radius: 4px; /* Rounded corners */
-    font-size: 16px; /* Adjust font size */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
 #canvas {
@@ -74,8 +74,8 @@ h2 {
     background: #fafafa;
     max-width: 100%;
     border-radius: 8px;
-    width: 100%; /* Ensure the canvas scales with its container */
-    height: auto; /* Maintain aspect ratio */
+    width: 100%;
+    height: auto;
 }
 
 .code-container {
@@ -128,15 +128,15 @@ h2 {
     }
 
     #canvas {
-        height: auto; /* Make the canvas more flexible */
+        height: auto;
     }
 
     .code-container textarea {
-        height: 150px; /* Adjust textarea height for smaller screens */
+        height: 150px;
     }
 
     #edgeDetectionMethod {
-        width: 100%; /* Ensure the dropdown scales with its container */
+        width: 100%;
     }
 }
 
@@ -150,6 +150,6 @@ h2 {
     }
 
     .code-container textarea {
-        height: 120px; /* Further adjust textarea height for very small screens */
+        height: 120px;
     }
 }
