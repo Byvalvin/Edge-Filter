@@ -2,7 +2,7 @@ const code = `
 //const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
 const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
-const ctx = canvas.getContext('2d');
+//const ctx = canvas.getContext('2d');
 const ctxSobel = sobelCanvas.getContext('2d');
 const ctxCanny = cannyCanvas.getContext('2d');
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
@@ -15,12 +15,12 @@ const cannyOptions = document.getElementById('cannyOptions') as HTMLDivElement;
 
 // Sobel Edge Detection Function
 function applySobelEdgeDetection() {
-    if (!ctx || !ctxSobel) return;
+    if (!ctxSobel) return;
     
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-    const width = canvas.width;
-    const height = canvas.height;
+    //const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    //const data = imageData.data;
+    //const width = canvas.width;
+    //const height = canvas.height;
 
     const output = ctxSobel.createImageData(width, height);
     const outputData = output.data;
@@ -226,12 +226,12 @@ function edgeTracking(output: Uint8ClampedArray, width: number, height: number) 
 }
 
 function applyCannyEdgeDetection() {
-    if (!ctx || !ctxCanny) return;
+    if (!ctxCanny) return;
 
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-    const width = canvas.width;
-    const height = canvas.height;
+    //const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    //const data = imageData.data;
+    //const width = canvas.width;
+    //const height = canvas.height;
 
     const grayscaleData = convertToGrayscale(data, width, height);
     const blurredData = gaussianBlur(grayscaleData, width, height);
