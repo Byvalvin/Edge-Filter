@@ -9,6 +9,66 @@ const thresholdRange = document.getElementById('thresholdRange') as HTMLInputEle
 const thresholdRangeHigh = document.getElementById('thresholdRangeHigh') as HTMLInputElement;
 const cannyOptions = document.getElementById('cannyOptions') as HTMLDivElement;
 
+// Sobel Edge Detection Function
+function applySobelEdgeDetection() {
+    if (!ctx) return;
+    
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    const width = canvas.width;
+    const height = canvas.height;
+
+    const output = ctx.createImageData(width, height);
+    const outputData = output.data;
+
+    const Gx = [
+        [-1, 0, 1],
+        [-2, 0, 2],
+        [-1, 0, 1]
+    ];
+    const Gy = [
+        [1, 2, 1],
+        [0, 0, 0],
+        [-1, -2, -1]
+    ];
+
+    function getPixel(x: number, y: number) {
+        const index = (y * width + x) * 4;
+        return [data[index], data[index + 1], data[index + 2], data[index + 3]];
+    }
+
+    function setPixel(x: number, y: number, r: number, g: number, b: number) {
+        const index = (y * width + x) * 4;
+        outputData[index] = r;
+        outputData[index + 1] = g;
+        outputData[index + 2] = b;
+        outputData[index + 3] = 255; // Alpha
+    }
+
+    for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < width - 1; x++) {
+            let pixelX = 0;
+            let pixelY = 0;
+
+            for (let ky = -1; ky <= 1; ky++) {
+                for (let kx = -1; kx <= 1; kx++) {
+                    const [r, g, b] = getPixel(x + kx, y + ky);
+                    const gray = (r + g + b) / 3;
+                    pixelX += gray * Gx[ky + 1][kx + 1];
+                    pixelY += gray * Gy[ky + 1][kx + 1];
+                }
+            }
+
+            const magnitude = Math.sqrt(pixelX * pixelX + pixelY * pixelY);
+            const value = Math.min(magnitude, 255);
+            setPixel(x, y, value, value, value);
+        }
+    }
+
+    ctx.putImageData(output, 0, 0);
+}
+
+// Canny
 function convertToGrayscale(data: Uint8ClampedArray, width: number, height: number): Uint8ClampedArray {
     const grayscaleData = new Uint8ClampedArray(data.length);
     for (let i = 0; i < data.length; i += 4) {
@@ -161,7 +221,7 @@ function edgeTracking(output: Uint8ClampedArray, width: number, height: number) 
     return finalOutput;
 }
 
-function applyEdgeDetection() {
+function applyCannyEdgeDetection() {
     if (!ctx) return;
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -207,43 +267,14 @@ uploadInput.addEventListener('change', function () {
     }
 });
 
-const thresholdSlider = document.getElementById('thresholdSlider') as HTMLElement;
-
-noUiSlider.create(thresholdSlider, {
-    start: [50, 100],
-    connect: true,
-    range: {
-        'min': 0,
-        'max': 255
-    },
-    step: 1,
-    format: {
-        to: value => Math.round(value),
-        from: value => Number(value)
+function applyEdgeDetection() {
+    const method = edgeDetectionMethod.value; // Get the selected method
+    if (method === 'sobel') {
+        applySobelEdgeDetection();
+    } else if (method === 'canny') {
+        applyCannyEdgeDetection();
     }
-});
-
-thresholdSlider.noUiSlider.on('update', function (values) {
-    lowThresholdInput.value = values[0];
-    highThresholdInput.value = values[1];
-});
-
-lowThresholdInput.addEventListener('input', function () {
-    thresholdSlider.noUiSlider.set([parseInt(lowThresholdInput.value, 10), null]);
-});
-
-highThresholdInput.addEventListener('input', function () {
-    thresholdSlider.noUiSlider.set([null, parseInt(highThresholdInput.value, 10)]);
-});
-
-thresholdSlider.noUiSlider.on('change', function (values) {
-    const lowValue = parseInt(values[0], 10);
-    const highValue = parseInt(values[1], 10);
-    if (lowValue > highValue) {
-        thresholdSlider.noUiSlider.set([highValue - 1, highValue]);
-    }
-});
-
+}
 
 edgeDetectionMethod.addEventListener('change', function () {
     cannyOptions.style.display = edgeDetectionMethod.value === 'canny' ? 'block' : 'none';
@@ -266,8 +297,6 @@ thresholdRangeHigh.addEventListener('input', function () {
 });
 
 `;
-
-
 
 // Evaluate the TypeScript code and run it
 const jsCode = ts.transpile(code);
