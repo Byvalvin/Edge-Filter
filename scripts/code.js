@@ -1,6 +1,10 @@
 const code = `
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
+const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d');
+const ctxSobel = sobelCanvas.getContext('2d');
+const ctxCanny = cannyCanvas.getContext('2d');
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
 const edgeDetectionMethod = document.getElementById('edgeDetectionMethod') as HTMLSelectElement;
 const lowThresholdInput = document.getElementById('lowThreshold') as HTMLInputElement;
@@ -11,14 +15,14 @@ const cannyOptions = document.getElementById('cannyOptions') as HTMLDivElement;
 
 // Sobel Edge Detection Function
 function applySobelEdgeDetection() {
-    if (!ctx) return;
+    if (!ctx || !ctxSobel) return;
     
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
     const width = canvas.width;
     const height = canvas.height;
 
-    const output = ctx.createImageData(width, height);
+    const output = ctxSobel.createImageData(width, height);
     const outputData = output.data;
 
     const Gx = [
@@ -65,10 +69,10 @@ function applySobelEdgeDetection() {
         }
     }
 
-    ctx.putImageData(output, 0, 0);
+    ctxSobel.putImageData(output, 0, 0);
 }
 
-// Canny
+// Canny Edge Detection Function
 function convertToGrayscale(data: Uint8ClampedArray, width: number, height: number): Uint8ClampedArray {
     const grayscaleData = new Uint8ClampedArray(data.length);
     for (let i = 0; i < data.length; i += 4) {
@@ -222,7 +226,7 @@ function edgeTracking(output: Uint8ClampedArray, width: number, height: number) 
 }
 
 function applyCannyEdgeDetection() {
-    if (!ctx) return;
+    if (!ctx || !ctxCanny) return;
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
@@ -240,13 +244,16 @@ function applyCannyEdgeDetection() {
     const doubleThreshold = doubleThresholding(suppressed, width, height, lowThreshold, highThreshold);
     const finalEdges = edgeTracking(doubleThreshold, width, height);
 
+    const cannyImageData = new ImageData(width, height);
+    const cannyOutputData = cannyImageData.data;
+
     for (let i = 0; i < finalEdges.length; i++) {
         const value = finalEdges[i];
-        data[i * 4] = data[i * 4 + 1] = data[i * 4 + 2] = value; // Set RGB to edge value
-        data[i * 4 + 3] = 255; // Alpha
+        cannyOutputData[i * 4] = cannyOutputData[i * 4 + 1] = cannyOutputData[i * 4 + 2] = value; // Set RGB to edge value
+        cannyOutputData[i * 4 + 3] = 255; // Alpha
     }
 
-    ctx.putImageData(imageData, 0, 0);
+    ctxCanny.putImageData(cannyImageData, 0, 0);
 }
 
 uploadInput.addEventListener('change', function () {
@@ -258,6 +265,10 @@ uploadInput.addEventListener('change', function () {
             img.onload = function () {
                 canvas.width = img.width;
                 canvas.height = img.height;
+                sobelCanvas.width = img.width;
+                sobelCanvas.height = img.height;
+                cannyCanvas.width = img.width;
+                cannyCanvas.height = img.height;
                 ctx?.drawImage(img, 0, 0);
                 applyEdgeDetection();
             };
@@ -271,8 +282,17 @@ function applyEdgeDetection() {
     const method = edgeDetectionMethod.value; // Get the selected method
     if (method === 'sobel') {
         applySobelEdgeDetection();
+        sobelCanvas.style.display = 'block';
+        cannyCanvas.style.display = 'none';
     } else if (method === 'canny') {
         applyCannyEdgeDetection();
+        sobelCanvas.style.display = 'none';
+        cannyCanvas.style.display = 'block';
+    } else if (method === 'both') {
+        applySobelEdgeDetection();
+        applyCannyEdgeDetection();
+        sobelCanvas.style.display = 'block';
+        cannyCanvas.style.display = 'block';
     }
 }
 
@@ -301,3 +321,4 @@ thresholdRangeHigh.addEventListener('input', function () {
 // Evaluate the TypeScript code and run it
 const jsCode = ts.transpile(code);
 eval(jsCode);
+
