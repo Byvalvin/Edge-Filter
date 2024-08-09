@@ -263,8 +263,8 @@ uploadInput.addEventListener('change', function () {
         reader.onload = function (e) {
             const img = new Image();
             img.onload = function () {
-                canvas.width = img.width;
-                canvas.height = img.height;
+                //canvas.width = img.width;
+                //canvas.height = img.height;
                 sobelCanvas.width = img.width;
                 sobelCanvas.height = img.height;
                 cannyCanvas.width = img.width;
