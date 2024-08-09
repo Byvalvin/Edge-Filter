@@ -3,6 +3,7 @@ const buttonCode = `
 const resetButton = document.getElementById('resetButton') as HTMLButtonElement;
 const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const edgeDetectionMethod = document.getElementById('edgeDetectionMethod') as HTMLSelectElement;
+const cannyOptions = document.getElementById('cannyOptions') as HTMLDivElement;
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
 
 if (resetButton && canvas && edgeDetectionMethod && uploadInput) {
@@ -15,7 +16,8 @@ if (resetButton && canvas && edgeDetectionMethod && uploadInput) {
         
         // Reset dropdown to default (Sobel)
         edgeDetectionMethod.value = 'sobel'; // Reset to default option
-        
+        cannyOptions.style.display = edgeDetectionMethod.value === 'canny' ? 'block' : 'none';
+    
         // Clear file input to remove uploaded image
         uploadInput.value = ''; // Clear the file input
     });
