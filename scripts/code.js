@@ -303,7 +303,7 @@ function nonMaximumSuppression2(magnitude: Uint8ClampedArray, direction: number[
     return output;
 }
 
-function nonMaximumSuppression(magnitude: Uint8ClampedArray, direction: number[], width: number, height: number): Uint8ClampedArray {
+function nonMaximumSuppression3(magnitude: Uint8ClampedArray, direction: number[], width: number, height: number): Uint8ClampedArray {
     const output = new Uint8ClampedArray(magnitude.length);
 
     for (let y = 1; y < height - 1; y++) {
@@ -337,6 +337,40 @@ function nonMaximumSuppression(magnitude: Uint8ClampedArray, direction: number[]
     return output;
 }
 
+
+function nonMaximumSuppression(magnitude: Uint8ClampedArray, direction: Float32Array, width: number, height: number): Uint8ClampedArray {
+    const output = new Uint8ClampedArray(magnitude.length);
+
+    for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < width - 1; x++) {
+            const index = y * width + x;
+            const angle = direction[index] % 180;
+
+            let q = 0, r = 0;
+            if ((angle >= 0 && angle < 22.5) || (angle >= 157.5 && angle < 180)) {
+                q = magnitude[index - 1]; // Pixel to the left
+                r = magnitude[index + 1]; // Pixel to the right
+            } else if (angle >= 22.5 && angle < 67.5) {
+                q = magnitude[index - width - 1]; // Top-right diagonal
+                r = magnitude[index + width + 1]; // Bottom-left diagonal
+            } else if (angle >= 67.5 && angle < 112.5) {
+                q = magnitude[index - width]; // Pixel above
+                r = magnitude[index + width]; // Pixel below
+            } else if (angle >= 112.5 && angle < 157.5) {
+                q = magnitude[index - width + 1]; // Top-left diagonal
+                r = magnitude[index + width - 1]; // Bottom-right diagonal
+            }
+
+            if (magnitude[index] >= q && magnitude[index] >= r) {
+                output[index] = magnitude[index];
+            } else {
+                output[index] = 0;
+            }
+        }
+    }
+
+    return output;
+}
 
 function doubleThresholding(magnitude: Uint8ClampedArray, width: number, height: number, lowThreshold: number, highThreshold: number) {
     const output = new Uint8ClampedArray(magnitude.length);
@@ -377,7 +411,7 @@ function edgeTracking(output: Uint8ClampedArray, width: number, height: number) 
     return finalOutput;
 }
 
-function applyCannyEdgeDetection() {
+function applyCannyEdgeDetection2() {
     if (!ctx) return;
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -426,6 +460,25 @@ function applyCannyEdgeDetection() {
     }
 
     ctx.putImageData(output, 0, 0);
+}
+
+function drawImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, imageData: Uint8ClampedArray, width: number, height: number) {
+    canvas.width = width;
+    canvas.height = height;
+    const image = context.createImageData(width, height);
+    image.data.set(imageData);
+    context.putImageData(image, 0, 0);
+}
+
+function applyCannyEdgeDetection(imageData: Uint8ClampedArray, width: number, height: number) {
+    const grayscale = convertToGrayscale(imageData, width, height);
+    const blurred = gaussianBlur(grayscale, width, height);
+    const [magnitude, direction] = computeGradients(blurred, width, height);
+    const suppressed = nonMaximumSuppression(magnitude, direction, width, height);
+    const thresholded = doubleThresholding(suppressed, width, height, 0, 50);
+    const edges = edgeTracking(thresholded, width, height);
+    drawImage(canvas, ctx, edges, img.width, img.height);
+    // return edges;
 }
 `;
 
