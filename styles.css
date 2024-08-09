@@ -110,13 +110,10 @@ h2 {
     margin: 5px 0;
 }
 
-#cannyOptions input[type="number"] {
+#cannyOptions input[type="number"],
+#cannyOptions input[type="range"] {
     display: block;
     margin-bottom: 10px;
-}
-
-#thresholdSlider {
-    margin: 10px 0;
 }
 
 .hidden {
