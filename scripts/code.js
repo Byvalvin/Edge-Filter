@@ -270,6 +270,7 @@ uploadInput.addEventListener('change', function () {
                 cannyCanvas.width = img.width;
                 cannyCanvas.height = img.height;
                 ctxSobel.drawImage(img, 0, 0);
+                ctxCanny.drawImage(img, 0, 0);
                 applyEdgeDetection();
             };
             img.src = e.target?.result as string;
