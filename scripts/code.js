@@ -470,7 +470,7 @@ function drawImage(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D,
     context.putImageData(image, 0, 0);
 }
 
-function applyCannyEdgeDetection(imageData: Uint8ClampedArray, width: number, height: number) {
+function applyCannyEdgeDetection3(imageData: Uint8ClampedArray, width: number, height: number) {
     const grayscale = convertToGrayscale(imageData, width, height);
     const blurred = gaussianBlur(grayscale, width, height);
     const [magnitude, direction] = computeGradients(blurred, width, height);
@@ -479,6 +479,45 @@ function applyCannyEdgeDetection(imageData: Uint8ClampedArray, width: number, he
     const edges = edgeTracking(thresholded, width, height);
     drawImage(canvas, ctx, edges, img.width, img.height);
     // return edges;
+}
+
+function applyCannyEdgeDetection() {
+    if (!ctx) return;
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    const width = canvas.width;
+    const height = canvas.height;
+
+    // Step 1: Convert to Grayscale
+    const grayscaleData = convertToGrayscale(data, width, height);
+    
+    // Step 2: Gaussian Blur
+    const blurredData = gaussianBlur(grayscaleData, width, height);
+    
+    // Step 3: Compute Gradients
+    const [gradientMagnitude, gradientDirection] = computeGradients(blurredData, width, height);
+    
+    // Step 4: Non-Maximum Suppression
+    const suppressed = nonMaximumSuppression(gradientMagnitude, gradientDirection, width, height);
+
+    // Step 5: Double Thresholding
+    const lowThreshold = 50;
+    const highThreshold = 150;
+    const thresholded = doubleThresholding(suppressed, width, height, lowThreshold, highThreshold);
+    
+    // Step 6: Edge Tracking by Hysteresis
+    const finalEdges = edgeTracking(thresholded, width, height);
+    
+    // Draw the final result
+    for (let i = 0; i < finalEdges.length; i++) {
+        const value = finalEdges[i];
+        imageData.data[i * 4] = value;     // Red
+        imageData.data[i * 4 + 1] = value; // Green
+        imageData.data[i * 4 + 2] = value; // Blue
+        imageData.data[i * 4 + 3] = 255;   // Alpha
+    }
+    ctx.putImageData(imageData, 0, 0);
 }
 `;
 
