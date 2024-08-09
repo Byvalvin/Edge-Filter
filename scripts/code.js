@@ -1,5 +1,5 @@
 const code = `
-const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+//const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
 const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
 const ctx = canvas.getContext('2d');
