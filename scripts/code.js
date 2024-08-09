@@ -207,6 +207,44 @@ uploadInput.addEventListener('change', function () {
     }
 });
 
+const thresholdSlider = document.getElementById('thresholdSlider') as HTMLElement;
+
+noUiSlider.create(thresholdSlider, {
+    start: [50, 100],
+    connect: true,
+    range: {
+        'min': 0,
+        'max': 255
+    },
+    step: 1,
+    format: {
+        to: value => Math.round(value),
+        from: value => Number(value)
+    }
+});
+
+thresholdSlider.noUiSlider.on('update', function (values) {
+    lowThresholdInput.value = values[0];
+    highThresholdInput.value = values[1];
+});
+
+lowThresholdInput.addEventListener('input', function () {
+    thresholdSlider.noUiSlider.set([parseInt(lowThresholdInput.value, 10), null]);
+});
+
+highThresholdInput.addEventListener('input', function () {
+    thresholdSlider.noUiSlider.set([null, parseInt(highThresholdInput.value, 10)]);
+});
+
+thresholdSlider.noUiSlider.on('change', function (values) {
+    const lowValue = parseInt(values[0], 10);
+    const highValue = parseInt(values[1], 10);
+    if (lowValue > highValue) {
+        thresholdSlider.noUiSlider.set([highValue - 1, highValue]);
+    }
+});
+
+
 edgeDetectionMethod.addEventListener('change', function () {
     cannyOptions.style.display = edgeDetectionMethod.value === 'canny' ? 'block' : 'none';
 });
@@ -228,6 +266,8 @@ thresholdRangeHigh.addEventListener('input', function () {
 });
 
 `;
+
+
 
 // Evaluate the TypeScript code and run it
 const jsCode = ts.transpile(code);
