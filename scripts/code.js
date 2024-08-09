@@ -1,10 +1,11 @@
 const code = `
-//const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+// Select canvas elements and their contexts
 const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
 const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
-//const ctx = canvas.getContext('2d');
 const ctxSobel = sobelCanvas.getContext('2d');
 const ctxCanny = cannyCanvas.getContext('2d');
+
+// Select other form elements
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
 const edgeDetectionMethod = document.getElementById('edgeDetectionMethod') as HTMLSelectElement;
 const lowThresholdInput = document.getElementById('lowThreshold') as HTMLInputElement;
@@ -13,14 +14,14 @@ const thresholdRange = document.getElementById('thresholdRange') as HTMLInputEle
 const thresholdRangeHigh = document.getElementById('thresholdRangeHigh') as HTMLInputElement;
 const cannyOptions = document.getElementById('cannyOptions') as HTMLDivElement;
 
-// Sobel Edge Detection Function
+// Apply Sobel Edge Detection
 function applySobelEdgeDetection() {
     if (!ctxSobel) return;
-    
-    //const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    //const data = imageData.data;
-    //const width = canvas.width;
-    //const height = canvas.height;
+
+    const imageData = ctxSobel.getImageData(0, 0, sobelCanvas.width, sobelCanvas.height);
+    const data = imageData.data;
+    const width = sobelCanvas.width;
+    const height = sobelCanvas.height;
 
     const output = ctxSobel.createImageData(width, height);
     const outputData = output.data;
@@ -72,7 +73,7 @@ function applySobelEdgeDetection() {
     ctxSobel.putImageData(output, 0, 0);
 }
 
-// Canny Edge Detection Function
+// Apply Canny Edge Detection
 function convertToGrayscale(data: Uint8ClampedArray, width: number, height: number): Uint8ClampedArray {
     const grayscaleData = new Uint8ClampedArray(data.length);
     for (let i = 0; i < data.length; i += 4) {
@@ -228,16 +229,16 @@ function edgeTracking(output: Uint8ClampedArray, width: number, height: number) 
 function applyCannyEdgeDetection() {
     if (!ctxCanny) return;
 
-    //const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    //const data = imageData.data;
-    //const width = canvas.width;
-    //const height = canvas.height;
+    const imageData = ctxCanny.getImageData(0, 0, cannyCanvas.width, cannyCanvas.height);
+    const data = imageData.data;
+    const width = cannyCanvas.width;
+    const height = cannyCanvas.height;
 
     const grayscaleData = convertToGrayscale(data, width, height);
     const blurredData = gaussianBlur(grayscaleData, width, height);
     const [gradientMagnitude, gradientDirection] = computeGradients(blurredData, width, height);
     const suppressed = nonMaximumSuppression(gradientMagnitude, gradientDirection, width, height);
-    
+
     const lowThreshold = parseInt(lowThresholdInput.value, 10) || 0;
     const highThreshold = parseInt(highThresholdInput.value, 10) || 255;
 
@@ -256,6 +257,7 @@ function applyCannyEdgeDetection() {
     ctxCanny.putImageData(cannyImageData, 0, 0);
 }
 
+// Handle image upload and apply edge detection
 uploadInput.addEventListener('change', function () {
     const file = uploadInput.files?.[0];
     if (file) {
@@ -263,13 +265,11 @@ uploadInput.addEventListener('change', function () {
         reader.onload = function (e) {
             const img = new Image();
             img.onload = function () {
-                //canvas.width = img.width;
-                //canvas.height = img.height;
                 sobelCanvas.width = img.width;
                 sobelCanvas.height = img.height;
                 cannyCanvas.width = img.width;
                 cannyCanvas.height = img.height;
-                //ctx?.drawImage(img, 0, 0);
+                ctxSobel.drawImage(img, 0, 0);
                 applyEdgeDetection();
             };
             img.src = e.target?.result as string;
@@ -278,6 +278,7 @@ uploadInput.addEventListener('change', function () {
     }
 });
 
+// Apply selected edge detection method
 function applyEdgeDetection() {
     const method = edgeDetectionMethod.value; // Get the selected method
     if (method === 'sobel') {
@@ -296,10 +297,12 @@ function applyEdgeDetection() {
     }
 }
 
+// Handle edge detection method selection
 edgeDetectionMethod.addEventListener('change', function () {
     cannyOptions.style.display = edgeDetectionMethod.value === 'canny' ? 'block' : 'none';
 });
 
+// Sync threshold sliders and inputs
 lowThresholdInput.addEventListener('input', function () {
     thresholdRange.value = lowThresholdInput.value;
 });
@@ -315,10 +318,8 @@ thresholdRange.addEventListener('input', function () {
 thresholdRangeHigh.addEventListener('input', function () {
     highThresholdInput.value = thresholdRangeHigh.value;
 });
-
 `;
 
 // Evaluate the TypeScript code and run it
 const jsCode = ts.transpile(code);
 eval(jsCode);
-
