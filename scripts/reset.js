@@ -1,7 +1,7 @@
 // Function for reset button
 const buttonCode = `
 const resetButton = document.getElementById('resetButton') as HTMLButtonElement;
-const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+//const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
 const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
 const edgeDetectionMethod = document.getElementById('edgeDetectionMethod') as HTMLSelectElement;
