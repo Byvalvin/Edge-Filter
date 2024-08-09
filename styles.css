@@ -101,6 +101,25 @@ h2 {
     font-family: 'Courier New', Courier, monospace;
 }
 
+#cannyOptions {
+    margin: 20px 0;
+}
+
+#cannyOptions label {
+    display: block;
+    margin: 5px 0;
+}
+
+#cannyOptions input[type="number"],
+#cannyOptions input[type="range"] {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
