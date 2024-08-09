@@ -4,6 +4,12 @@ const ctx = canvas.getContext('2d');
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
 const edgeDetectionMethod = document.getElementById('edgeDetectionMethod') as HTMLSelectElement;
 
+const lowThresholdInput = document.getElementById('lowThreshold') as HTMLInputElement;
+const highThresholdInput = document.getElementById('highThreshold') as HTMLInputElement;
+const thresholdRange = document.getElementById('thresholdRange') as HTMLInputElement;
+const thresholdRangeHigh = document.getElementById('thresholdRangeHigh') as HTMLInputElement;
+const cannyOptions = document.getElementById('cannyOptions') as HTMLDivElement;
+
 function convertToGrayscale2(data: Uint8ClampedArray, width: number, height: number): Uint8ClampedArray {
     const grayscaleData = new Uint8ClampedArray(data.length);
     for (let y = 0; y < height; y++) {
