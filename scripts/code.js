@@ -269,7 +269,7 @@ uploadInput.addEventListener('change', function () {
                 sobelCanvas.height = img.height;
                 cannyCanvas.width = img.width;
                 cannyCanvas.height = img.height;
-                ctx?.drawImage(img, 0, 0);
+                //ctx?.drawImage(img, 0, 0);
                 applyEdgeDetection();
             };
             img.src = e.target?.result as string;
