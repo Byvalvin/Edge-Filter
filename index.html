@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TypeScript Edge Detection</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.8.0/nouislider.min.css" />
 </head>
 <body>
     <header>
@@ -25,8 +26,7 @@
             <input type="number" id="highThreshold" min="0" max="255" value="100">
             
             <h3>Adjust Thresholds:</h3>
-            <input type="range" id="thresholdRange" min="0" max="255" step="1" value="50">
-            <input type="range" id="thresholdRangeHigh" min="0" max="255" step="1" value="100">
+            <div id="thresholdSlider"></div>
         </div>
 
         <h2>Upload Image for Edge Detection</h2>
@@ -36,8 +36,10 @@
     </div>
 
     <script src="https://unpkg.com/typescript@latest/lib/typescript.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.8.0/nouislider.min.js"></script>
     <script src="scripts/loadCode.js" defer></script>
 </body>
 </html>
+
 
 
