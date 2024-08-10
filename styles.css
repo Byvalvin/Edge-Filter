@@ -1,3 +1,4 @@
+
 /* General Styles */
 body {
     font-family: Arial, sans-serif;
@@ -49,15 +50,21 @@ h2 {
     color: white;
     font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #resetButton:hover {
-    background: #0056b3; /* Darker blue on hover */
+    background: #0056b3;
 }
 
 #resetButton:focus {
-    outline: 2px solid #0056b3; /* Focus outline */
+    outline: 2px solid #0056b3;
     outline-offset: 2px;
+}
+
+#resetButton:disabled {
+    background: #ccc;
+    cursor: not-allowed;
 }
 
 /* Download Button Styles */
@@ -66,26 +73,31 @@ h2 {
     padding: 10px 15px;
     border: none;
     border-radius: 4px;
-    background: #28a745; /* Green background */
+    background: #28a745;
     color: white;
     font-size: 16px;
     cursor: pointer;
-    display: none; /* Initially hidden */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+    display: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #downloadButton:hover {
-    background: #218838; /* Darker green on hover */
+    background: #218838;
 }
 
 #downloadButton:focus {
-    outline: 2px solid #218838; /* Focus outline */
+    outline: 2px solid #218838;
     outline-offset: 2px;
 }
 
 #downloadButton:active {
-    background: #1e7e34; /* Even darker green on active */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for active state */
+    background: #1e7e34;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#downloadButton:disabled {
+    background: #ccc;
+    cursor: not-allowed;
 }
 
 #edgeDetectionMethod {
@@ -112,7 +124,7 @@ h2 {
 
 #sobelCanvas,
 #cannyCanvas {
-    display: none; /* Initially hidden, shown based on edge detection method */
+    display: none;
 }
 
 .code-container {
