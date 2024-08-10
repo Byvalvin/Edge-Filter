@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const scriptStack = [
     { src: 'scripts/code.js', msg: 'Done loading code.js' },
     { src: 'scripts/reset.js', msg: 'Done loading reset.js' },
+    { src: 'scripts/download.js', msg: 'Done loading download.js' },
     // Add more scripts here as needed
   ];
 
