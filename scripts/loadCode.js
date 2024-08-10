@@ -1,27 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const next = {
-    src:'scripts/reset.js',
-    msg:'Done loading reset.js'
-  }
-  loadScript('scripts/code.js', 'Done loading code.js', next);
-  
+  // Define the stack of scripts
+  const scriptStack = [
+    { src: 'scripts/code.js', msg: 'Done loading code.js' },
+    { src: 'scripts/reset.js', msg: 'Done loading reset.js' },
+    // Add more scripts here as needed
+  ];
+
+  // Start loading scripts from the stack
+  loadScripts(scriptStack);
 });
 
+// Function to load scripts from the stack dynamically
+const loadScripts = (stack) => {
+  if (stack.length === 0) {
+    console.log('All scripts loaded.');
+    return;
+  }
 
+  const { src, msg } = stack.shift(); // Get the next script from the stack
 
-// Function to load chained scripts dynamically
-const loadScript = (src, successMessage, nextScript) => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.defer = true;
-    script.onload = () => {
-        console.log(successMessage);
-        if(nextScript){
-            loadScript(nextScript.src, nextScript.msg, nextScript.next);
-        }
-    }
-    script.onerror = () => console.error(`Failed to load ${src}`);
-    document.body.appendChild(script);
+  const script = document.createElement('script');
+  script.src = src;
+  script.defer = true;
+  script.onload = () => {
+    console.log(msg);
+    loadScripts(stack); // Load the next script from the stack
+  };
+  script.onerror = () => console.error(`Failed to load ${src}`);
+  document.body.appendChild(script);
 };
 
 
