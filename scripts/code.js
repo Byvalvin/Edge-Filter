@@ -296,6 +296,8 @@ function applyEdgeDetection() {
         sobelCanvas.style.display = 'block';
         cannyCanvas.style.display = 'block';
     }
+
+    onCanvasOutputUpdated(); // Ensure this is called
 }
 
 // Handle edge detection method selection
