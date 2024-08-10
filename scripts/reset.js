@@ -14,10 +14,11 @@ if (resetButton && edgeDetectionMethod && uploadInput && sobelCanvas && cannyCan
         const sobelCtx = sobelCanvas.getContext('2d');
         const cannyCtx = cannyCanvas.getContext('2d');
 
-        if (sobelCtx && cannyCtx) {
-            // Clear all canvas elements
-            // ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (sobelCtx) {
             sobelCtx.clearRect(0, 0, sobelCanvas.width, sobelCanvas.height);
+        }
+        
+        if (cannyCtx) {
             cannyCtx.clearRect(0, 0, cannyCanvas.width, cannyCanvas.height);
         }
         
