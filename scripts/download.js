@@ -3,6 +3,7 @@ const downloadCode = `
 console.log('in');
 // Function to download the canvas image with a given filename
 function downloadImage(canvas: HTMLCanvasElement, filename: string) {
+    console.log("dling..");
     const link = document.createElement('a');
     const imageFormat = 'image/png';
     link.href = canvas.toDataURL(imageFormat); // Specify image format
@@ -12,11 +13,12 @@ function downloadImage(canvas: HTMLCanvasElement, filename: string) {
 
 // Function to show or hide the download button
 function toggleDownloadButton(show: boolean) {
-    console.log('tog');
+    
     const downloadButton = document.getElementById('downloadButton') as HTMLButtonElement;
     if (downloadButton) {
         downloadButton.style.display = show ? 'block' : 'none';
     }
+    console.log('tog', show, downloadButton);    
 }
 
 // Event listener for the download button
