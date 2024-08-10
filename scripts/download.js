@@ -42,11 +42,17 @@ function updateDownloadButtonVisibility() {
     console.log('udlbv');
     const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
     const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
-    const showButton = (sobelCanvas && !sobelCanvas.classList.contains('hidden')) ||
-                       (cannyCanvas && !cannyCanvas.classList.contains('hidden'));
-    console.log(sobelCanvas, sobelCanvas.classList.contains('hidden'), cannyCanvas, cannyCanvas.classList.contains('hidden'));
+
+    console.log('sobelCanvas display:', getComputedStyle(sobelCanvas).display);
+    console.log('cannyCanvas display:', getComputedStyle(cannyCanvas).display);
+
+    const showButton = (sobelCanvas && getComputedStyle(sobelCanvas).display !== 'none') ||
+                       (cannyCanvas && getComputedStyle(cannyCanvas).display !== 'none');
+
+    console.log('showButton:', showButton);
     toggleDownloadButton(showButton);
 }
+
 
 downloadButton.addEventListener('click', () => {
     const selectedMethod = (document.getElementById('edgeDetectionMethod') as HTMLSelectElement).value;
