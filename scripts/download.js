@@ -3,8 +3,9 @@ const downloadCode = `
 
 // Function to download the canvas image with a given filename
 function downloadImage(canvas: HTMLCanvasElement, filename: string) {
+    const imageFormat = 'image/png';
     const link = document.createElement('a');
-    link.href = canvas.toDataURL();
+    link.href = canvas.toDataURL(imageFormat);
     link.download = filename;
     link.click();
 }
