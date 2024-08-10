@@ -44,6 +44,7 @@ function updateDownloadButtonVisibility() {
     const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
     const showButton = (sobelCanvas && !sobelCanvas.classList.contains('hidden')) ||
                        (cannyCanvas && !cannyCanvas.classList.contains('hidden'));
+    console.log(sobelCanvas, sobelCanvas.classList.contains('hidden'), cannyCanvas, cannyCanvas.classList.contains('hidden'));
     toggleDownloadButton(showButton);
 }
 
