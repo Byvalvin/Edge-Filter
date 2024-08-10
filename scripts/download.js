@@ -1,6 +1,6 @@
 const downloadCode = `
 // download.ts
-
+console.log('in');
 // Function to download the canvas image with a given filename
 function downloadImage(canvas: HTMLCanvasElement, filename: string) {
     const link = document.createElement('a');
@@ -12,6 +12,7 @@ function downloadImage(canvas: HTMLCanvasElement, filename: string) {
 
 // Function to show or hide the download button
 function toggleDownloadButton(show: boolean) {
+    console.log('tog');
     const downloadButton = document.getElementById('downloadButton') as HTMLButtonElement;
     if (downloadButton) {
         downloadButton.style.display = show ? 'block' : 'none';
@@ -28,6 +29,7 @@ uploadInput.addEventListener('change', (event) => {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
         uploadedFileName = file.name.split('.').slice(0, -1).join('.'); // Remove file extension
+        console.log(uploadedFileName);
         // Show the download button if output exists
         updateDownloadButtonVisibility();
     }
@@ -35,6 +37,7 @@ uploadInput.addEventListener('change', (event) => {
 
 // Check visibility of download button based on output
 function updateDownloadButtonVisibility() {
+    console.log('udlbv');
     const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
     const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
     const showButton = (sobelCanvas && !sobelCanvas.classList.contains('hidden')) ||
@@ -70,6 +73,7 @@ downloadButton.addEventListener('click', () => {
 // Call this function whenever the canvas output is updated
 // For example, after processing the image or changing detection method
 function onCanvasOutputUpdated() {
+    console.log('ocou');
     updateDownloadButtonVisibility();
 }
 `;
