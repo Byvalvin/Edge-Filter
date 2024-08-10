@@ -3,9 +3,9 @@ const downloadCode = `
 
 // Function to download the canvas image with a given filename
 function downloadImage(canvas: HTMLCanvasElement, filename: string) {
-    const imageFormat = 'image/png';
     const link = document.createElement('a');
-    link.href = canvas.toDataURL(imageFormat);
+    const imageFormat = 'image/png';
+    link.href = canvas.toDataURL(imageFormat); // Specify image format
     link.download = filename;
     link.click();
 }
@@ -13,7 +13,9 @@ function downloadImage(canvas: HTMLCanvasElement, filename: string) {
 // Function to show or hide the download button
 function toggleDownloadButton(show: boolean) {
     const downloadButton = document.getElementById('downloadButton') as HTMLButtonElement;
-    downloadButton.style.display = show ? 'block' : 'none';
+    if (downloadButton) {
+        downloadButton.style.display = show ? 'block' : 'none';
+    }
 }
 
 // Event listener for the download button
@@ -48,18 +50,20 @@ downloadButton.addEventListener('click', () => {
         return;
     }
 
-    if (selectedMethod === 'sobel') {
-        const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
-        downloadImage(sobelCanvas, uploadedFileName+"_sobel.png");
-    } else if (selectedMethod === 'canny') {
-        const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
-        downloadImage(cannyCanvas, uploadedFileName+"_canny.png");
+    const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
+    const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
+
+    if (selectedMethod === 'sobel' && sobelCanvas) {
+        downloadImage(sobelCanvas, uploadedFileName + "_sobel.png");
+    } else if (selectedMethod === 'canny' && cannyCanvas) {
+        downloadImage(cannyCanvas, uploadedFileName + "_canny.png");
     } else if (selectedMethod === 'both') {
-        const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
-        const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
-        // Download both images
-        downloadImage(sobelCanvas, uploadedFileName+"_sobel.png");
-        downloadImage(cannyCanvas, uploadedFileName+"_canny.png");
+        if (sobelCanvas) {
+            downloadImage(sobelCanvas, uploadedFileName + "_sobel.png");
+        }
+        if (cannyCanvas) {
+            downloadImage(cannyCanvas, uploadedFileName + "_canny.png");
+        }
     }
 });
 
@@ -68,9 +72,9 @@ downloadButton.addEventListener('click', () => {
 function onCanvasOutputUpdated() {
     updateDownloadButtonVisibility();
 }
-
-`
+`;
 
 // Evaluate the TypeScript code and run it
 const dlJsCode = ts.transpile(downloadCode);
 eval(dlJsCode);
+
