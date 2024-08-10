@@ -7,6 +7,7 @@ const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
 const edgeDetectionMethod = document.getElementById('edgeDetectionMethod') as HTMLSelectElement;
 const cannyOptions = document.getElementById('cannyOptions') as HTMLDivElement;
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
+const downloadButton = document.getElementById('downloadButton') as HTMLButtonElement;
 
 if (resetButton && edgeDetectionMethod && uploadInput && sobelCanvas && cannyCanvas) {
     resetButton.addEventListener('click', () => {
@@ -28,6 +29,11 @@ if (resetButton && edgeDetectionMethod && uploadInput && sobelCanvas && cannyCan
     
         // Clear file input to remove uploaded image
         uploadInput.value = ''; // Clear the file input
+
+        // Hide the download button
+        if (downloadButton) {
+            downloadButton.style.display = 'none';
+        }
     });
 } else {
     console.error('Could not find the resetButton, edgeDetectionMethod, uploadInput, sobelCanvas, or cannyCanvas elements.');
