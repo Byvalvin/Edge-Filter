@@ -3,7 +3,6 @@ const downloadCode = `
 console.log('in');
 // Function to download the canvas image with a given filename
 function downloadImage(canvas: HTMLCanvasElement, filename: string) {
-    console.log("dling..");
     const link = document.createElement('a');
     const imageFormat = 'image/png';
     link.href = canvas.toDataURL(imageFormat); // Specify image format
@@ -18,7 +17,6 @@ function toggleDownloadButton(show: boolean) {
     if (downloadButton) {
         downloadButton.style.display = show ? 'block' : 'none';
     }
-    console.log('tog', show, downloadButton);    
 }
 
 // Event listener for the download button
@@ -31,7 +29,6 @@ uploadInput.addEventListener('change', (event) => {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
         uploadedFileName = file.name.split('.').slice(0, -1).join('.'); // Remove file extension
-        console.log(uploadedFileName);
         // Show the download button if output exists
         updateDownloadButtonVisibility();
     }
@@ -39,17 +36,12 @@ uploadInput.addEventListener('change', (event) => {
 
 // Check visibility of download button based on output
 function updateDownloadButtonVisibility() {
-    console.log('udlbv');
     const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
     const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
-
-    console.log('sobelCanvas display:', getComputedStyle(sobelCanvas).display);
-    console.log('cannyCanvas display:', getComputedStyle(cannyCanvas).display);
 
     const showButton = (sobelCanvas && getComputedStyle(sobelCanvas).display !== 'none') ||
                        (cannyCanvas && getComputedStyle(cannyCanvas).display !== 'none');
 
-    console.log('showButton:', showButton);
     toggleDownloadButton(showButton);
 }
 
@@ -82,7 +74,6 @@ downloadButton.addEventListener('click', () => {
 // Call this function whenever the canvas output is updated
 // For example, after processing the image or changing detection method
 function onCanvasOutputUpdated() {
-    console.log('ocou');
     updateDownloadButtonVisibility();
 }
 `;
