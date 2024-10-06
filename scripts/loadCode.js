@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Define the stack of scripts
   const scriptStack = [
+    { src: 'scripts/loading.js', msg: 'Done loading loading.js' },
     { src: 'scripts/code.js', msg: 'Done loading code.js' },
     { src: 'scripts/reset.js', msg: 'Done loading reset.js' },
     { src: 'scripts/download.js', msg: 'Done loading download.js' },
