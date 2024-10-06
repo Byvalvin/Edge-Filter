@@ -2,8 +2,9 @@ const code = `
 // Select canvas elements and their contexts
 const sobelCanvas = document.getElementById('sobelCanvas') as HTMLCanvasElement;
 const cannyCanvas = document.getElementById('cannyCanvas') as HTMLCanvasElement;
-const ctxSobel = sobelCanvas.getContext('2d');
-const ctxCanny = cannyCanvas.getContext('2d');
+// Get 2D contexts with willReadFrequently set to true
+const ctxSobel = sobelCanvas.getContext('2d', { willReadFrequently: true });
+const ctxCanny = cannyCanvas.getContext('2d', { willReadFrequently: true });
 
 // Select other form elements
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
