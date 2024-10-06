@@ -17,4 +17,9 @@ function updateThresholds(value, value2) {
     document.getElementById('thresholdRangeHigh').value = highThreshold;
     document.getElementById('thresholdRangeValue').textContent = `${lowThreshold} - ${highThreshold}`;
 }
+/*
+Regarding the Slider
+If you're planning to implement the double-headed slider later, consider using libraries like noUiSlider or ion.RangeSlider, which can provide more robust functionality out of the box and save you some headaches.
 
+
+*/
