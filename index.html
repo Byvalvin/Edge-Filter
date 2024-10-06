@@ -23,15 +23,12 @@
 
         <div id="cannyOptions" class="hidden">
             <h2>Canny Edge Detection Thresholds</h2>
-            <label for="lowThreshold">Low Threshold: <span id="lowThresholdValue">50</span></label>
-            <label for="highThreshold">High Threshold: <span id="highThresholdValue">100</span></label>
-            
-            <h3>Adjust Thresholds:</h3>
-            <input type="range" id="thresholdRange" min="0" max="255" step="1" value="50" oninput="updateLowThreshold(this.value)">
-            <input type="range" id="thresholdRangeHigh" min="0" max="255" step="1" value="100" oninput="updateHighThreshold(this.value)">
-            <div id="thresholdSlider">
-                <input type="range" min="0" max="255" value="50" id="lowThresholdSlider" class="double-slider" oninput="syncSliders(this.value, 'highThresholdSlider')">
-                <input type="range" min="0" max="255" value="100" id="highThresholdSlider" class="double-slider" oninput="syncSliders('lowThresholdSlider', this.value)">
+            <div id="cannySlider">
+                <label for="lowThresholdSlider">Low Threshold: <span id="lowThresholdValue">50</span></label>
+                <input type="range" id="lowThresholdSlider" min="0" max="255" value="50" oninput="updateLowThreshold(this.value)">
+                
+                <label for="highThresholdSlider">High Threshold: <span id="highThresholdValue">100</span></label>
+                <input type="range" id="highThresholdSlider" min="0" max="255" value="100" oninput="updateHighThreshold(this.value)">
             </div>
         </div>
 
