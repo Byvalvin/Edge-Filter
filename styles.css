@@ -170,20 +170,30 @@ h2 {
     font-family: 'Courier New', Courier, monospace;
 }
 
+/* Canny Options Styles */
 #cannyOptions {
     margin: 20px 0;
 }
 
 #cannyOptions label {
     display: block;
-    margin: 5px 0;
+    margin: 10px 0 5px; /* Added margin for better spacing */
 }
 
-#cannyOptions input[type="number"],
-#cannyOptions input[type="range"] {
-    display: block;
+#cannySlider {
+    margin: 20px 0;
+}
+
+#cannySlider input[type="range"] {
+    width: 100%; /* Full width for sliders */
     margin-bottom: 10px;
 }
+
+/* Value Display Styles */
+#lowThresholdValue, #highThresholdValue {
+    font-weight: bold;
+}
+
 
 .hidden {
     display: none;
@@ -202,6 +212,10 @@ h2 {
         height: auto;
     }
 
+    #cannySlider input[type="range"] {
+        height: 40px; /* Increase height for touch-friendly sliders */
+    }
+    
     .code-container textarea {
         height: 150px;
     }
