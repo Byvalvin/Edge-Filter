@@ -281,23 +281,27 @@ uploadInput.addEventListener('change', function () {
 
 // Apply selected edge detection method
 function applyEdgeDetection() {
+    showLoading();  // Show loading indicator
     const method = edgeDetectionMethod.value; // Get the selected method
-    if (method === 'sobel') {
-        applySobelEdgeDetection();
-        sobelCanvas.style.display = 'block';
-        cannyCanvas.style.display = 'none';
-    } else if (method === 'canny') {
-        applyCannyEdgeDetection();
-        sobelCanvas.style.display = 'none';
-        cannyCanvas.style.display = 'block';
-    } else if (method === 'both') {
-        applySobelEdgeDetection();
-        applyCannyEdgeDetection();
-        sobelCanvas.style.display = 'block';
-        cannyCanvas.style.display = 'block';
-    }
+    setTimeout(() => { // Use setTimeout to allow the UI to update
+        if (method === 'sobel') {
+            applySobelEdgeDetection();
+            sobelCanvas.style.display = 'block';
+            cannyCanvas.style.display = 'none';
+        } else if (method === 'canny') {
+            applyCannyEdgeDetection();
+            sobelCanvas.style.display = 'none';
+            cannyCanvas.style.display = 'block';
+        } else if (method === 'both') {
+            applySobelEdgeDetection();
+            applyCannyEdgeDetection();
+            sobelCanvas.style.display = 'block';
+            cannyCanvas.style.display = 'block';
+        }
 
-    onCanvasOutputUpdated(); // Ensure this is called
+        hideLoading(); // Hide loading indicator
+        onCanvasOutputUpdated(); // Ensure this is called
+    }, 0); // Delay to ensure loading message is displayed}
 }
 
 // Handle edge detection method selection
