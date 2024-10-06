@@ -310,6 +310,7 @@ edgeDetectionMethod.addEventListener('change', function () {
 });
 
 // Sync threshold sliders and inputs
+/*
 lowThresholdInput.addEventListener('input', function () {
     thresholdRange.value = lowThresholdInput.value;
 });
@@ -325,6 +326,7 @@ thresholdRange.addEventListener('input', function () {
 thresholdRangeHigh.addEventListener('input', function () {
     highThresholdInput.value = thresholdRangeHigh.value;
 });
+*/
 `;
 
 // Evaluate the TypeScript code and run it
