@@ -23,14 +23,16 @@
 
         <div id="cannyOptions" class="hidden">
             <h2>Canny Edge Detection Thresholds</h2>
-            <label for="lowThreshold">Low Threshold:</label>
-            <input type="number" id="lowThreshold" min="0" max="255" value="50">
-            <label for="highThreshold">High Threshold:</label>
-            <input type="number" id="highThreshold" min="0" max="255" value="100">
+            <label for="lowThreshold">Low Threshold: <span id="lowThresholdValue">50</span></label>
+            <label for="highThreshold">High Threshold: <span id="highThresholdValue">100</span></label>
             
             <h3>Adjust Thresholds:</h3>
-            <input type="range" id="thresholdRange" min="0" max="255" step="1" value="50">
-            <input type="range" id="thresholdRangeHigh" min="0" max="255" step="1" value="100">
+            <input type="range" id="thresholdRange" min="0" max="255" step="1" value="50" oninput="updateLowThreshold(this.value)">
+            <input type="range" id="thresholdRangeHigh" min="0" max="255" step="1" value="100" oninput="updateHighThreshold(this.value)">
+            <div id="thresholdSlider">
+                <input type="range" min="0" max="255" value="50" id="lowThresholdSlider" class="double-slider" oninput="syncSliders(this.value, 'highThresholdSlider')">
+                <input type="range" min="0" max="255" value="100" id="highThresholdSlider" class="double-slider" oninput="syncSliders('lowThresholdSlider', this.value)">
+            </div>
         </div>
 
         <h2>Upload Image for Edge Detection</h2>
@@ -48,8 +50,4 @@
     <script src="scripts/loadCode.js" defer></script>
 </body>
 </html>
-
-
-
-
 
