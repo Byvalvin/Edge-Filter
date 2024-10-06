@@ -1,29 +1,26 @@
 
+// Update low threshold value display
 function updateLowThreshold(value) {
     document.getElementById('lowThresholdValue').textContent = value;
-    const highSlider = document.getElementById('highThresholdSlider');
-    if (parseInt(value) > parseInt(highSlider.value)) {
-        highSlider.value = value;
-        document.getElementById('highThresholdValue').textContent = highSlider.value;
-    }
+    // Sync with the other slider if needed
+    document.getElementById('lowThresholdSlider').value = value;
 }
 
+// Update high threshold value display
 function updateHighThreshold(value) {
     document.getElementById('highThresholdValue').textContent = value;
-    const lowSlider = document.getElementById('lowThresholdSlider');
-    if (parseInt(value) < parseInt(lowSlider.value)) {
-        lowSlider.value = value;
-        document.getElementById('lowThresholdValue').textContent = lowSlider.value;
-    }
+    // Sync with the other slider if needed
+    document.getElementById('highThresholdSlider').value = value;
 }
 
+// Function to sync slider values
 function syncSliders(lowSliderId, highSliderId) {
-    const lowSlider = document.getElementById(lowSliderId);
-    const highSlider = document.getElementById(highSliderId);
-    const lowValue = parseInt(lowSlider.value);
-    const highValue = parseInt(highSlider.value);
+    const lowValue = document.getElementById(lowSliderId).value;
+    const highValue = document.getElementById(highSliderId).value;
 
-    if (lowValue > highValue) {
-        lowSlider.value = highValue;
+    if (lowValue >= highValue) {
+        document.getElementById(lowSliderId).value = highValue - 1; // Adjust low slider
     }
+    updateLowThreshold(document.getElementById('lowThresholdSlider').value);
+    updateHighThreshold(document.getElementById('highThresholdSlider').value);
 }
