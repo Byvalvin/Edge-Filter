@@ -1,43 +1,20 @@
-// Update low threshold value display
-function updateLowThreshold(value) {
-    document.getElementById('lowThresholdValue').textContent = value;
+let lowThreshold = 50;
+let highThreshold = 100;
 
-    const lowSlider = document.getElementById('lowThresholdSlider');
-    const highSlider = document.getElementById('highThresholdSlider');
+function updateThresholds(value, value2) {
+    lowThreshold = value; // Get the new low value from the slider
+    highThreshold = value2; // Get the new high value from the slider
 
-    if (parseInt(value) >= parseInt(highSlider.value)) {
-        highSlider.value = value;
-        document.getElementById('highThresholdValue').textContent = value;
-    }
-}
+    document.getElementById('lowThresholdValue').textContent = lowThreshold;
+    document.getElementById('highThresholdValue').textContent = highThreshold;
 
-// Update high threshold value display
-function updateHighThreshold(value) {
-    document.getElementById('highThresholdValue').textContent = value;
-
-    const lowSlider = document.getElementById('lowThresholdSlider');
-    const highSlider = document.getElementById('highThresholdSlider');
-
-    if (parseInt(value) <= parseInt(lowSlider.value)) {
-        lowSlider.value = value;
-        document.getElementById('lowThresholdValue').textContent = value;
-    }
-}
-
-// Function to sync slider values
-function syncSliders(lowSliderId, highSliderId) {
-    const lowValue = document.getElementById(lowSliderId).value;
-    const highValue = document.getElementById(highSliderId).value;
-
-    if (parseInt(lowValue) >= parseInt(highValue)) {
-        document.getElementById(lowSliderId).value = parseInt(highValue) - 1; // Adjust low slider
+    // Ensure the sliders can't cross
+    if (lowThreshold >= highThreshold) {
+        lowThreshold = highThreshold - 1; // Adjust low threshold
     }
 
-    updateLowThreshold(document.getElementById(lowSliderId).value);
-    updateHighThreshold(document.getElementById(highSliderId).value);
+    document.getElementById('thresholdRange').value = lowThreshold;
+    document.getElementById('thresholdRangeHigh').value = highThreshold;
+    document.getElementById('thresholdRangeValue').textContent = `${lowThreshold} - ${highThreshold}`;
 }
-
-// Add event listeners for sliders to sync values on input
-document.getElementById('lowThresholdSlider').addEventListener('input', () => syncSliders('lowThresholdSlider', 'highThresholdSlider'));
-document.getElementById('highThresholdSlider').addEventListener('input', () => syncSliders('lowThresholdSlider', 'highThresholdSlider'));
 
