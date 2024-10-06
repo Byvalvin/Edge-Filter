@@ -8,10 +8,8 @@ const ctxCanny = cannyCanvas.getContext('2d');
 // Select other form elements
 const uploadInput = document.getElementById('upload') as HTMLInputElement;
 const edgeDetectionMethod = document.getElementById('edgeDetectionMethod') as HTMLSelectElement;
-const lowThresholdInput = document.getElementById('lowThreshold') as HTMLInputElement;
-const highThresholdInput = document.getElementById('highThreshold') as HTMLInputElement;
-const thresholdRange = document.getElementById('thresholdRange') as HTMLInputElement;
-const thresholdRangeHigh = document.getElementById('thresholdRangeHigh') as HTMLInputElement;
+const lowThresholdSlider = document.getElementById('lowThresholdSlider') as HTMLInputElement;
+const highThresholdSlider = document.getElementById('highThresholdSlider') as HTMLInputElement;
 const cannyOptions = document.getElementById('cannyOptions') as HTMLDivElement;
 
 // Apply Sobel Edge Detection
@@ -239,8 +237,9 @@ function applyCannyEdgeDetection() {
     const [gradientMagnitude, gradientDirection] = computeGradients(blurredData, width, height);
     const suppressed = nonMaximumSuppression(gradientMagnitude, gradientDirection, width, height);
 
-    const lowThreshold = parseInt(lowThresholdInput.value, 10) || 0;
-    const highThreshold = parseInt(highThresholdInput.value, 10) || 255;
+    // Retrieve the low and high threshold values from the sliders
+    const lowThreshold = parseInt(lowThresholdSlider.value, 10) || 0;
+    const highThreshold = parseInt(highThresholdSlider.value, 10) || 255;
 
     const doubleThreshold = doubleThresholding(suppressed, width, height, lowThreshold, highThreshold);
     const finalEdges = edgeTracking(doubleThreshold, width, height);
@@ -309,24 +308,6 @@ edgeDetectionMethod.addEventListener('change', function () {
     cannyOptions.style.display = edgeDetectionMethod.value === 'canny' ? 'block' : 'none';
 });
 
-// Sync threshold sliders and inputs
-/*
-lowThresholdInput.addEventListener('input', function () {
-    thresholdRange.value = lowThresholdInput.value;
-});
-
-highThresholdInput.addEventListener('input', function () {
-    thresholdRangeHigh.value = highThresholdInput.value;
-});
-
-thresholdRange.addEventListener('input', function () {
-    lowThresholdInput.value = thresholdRange.value;
-});
-
-thresholdRangeHigh.addEventListener('input', function () {
-    highThresholdInput.value = thresholdRangeHigh.value;
-});
-*/
 `;
 
 // Evaluate the TypeScript code and run it
